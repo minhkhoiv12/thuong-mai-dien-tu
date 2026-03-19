@@ -48,16 +48,16 @@ public class CartServiceImpl implements CartService{
         CartItem cartItem = cartItemRepository.findCartItemByProductIdAndCartId(cart.getCartId(), productId);
 
         if (cartItem != null) {
-            throw new APIException("Product " + product.getProductName() + " already exists in the cart");
+            throw new APIException("Product " + product.getProductName() + " đã tồn tại trong giỏ hàng");
         }
 
         if (product.getQuantity() == 0) {
-            throw new APIException(product.getProductName() + " is not available");
+            throw new APIException(product.getProductName() + " không khả dụng");
         }
 
         if (product.getQuantity() < quantity) {
-            throw new APIException("Please, make an order of the " + product.getProductName()
-                    + " less than or equal to the quantity " + product.getQuantity() + ".");
+                throw new APIException("Vui lòng tạo đơn hàng cho " + product.getProductName()
+                    + " Số lượng yêu cầu phải nhỏ hơn hoặc bằng số lượng tồn kho " + product.getQuantity() + ".");
         }
 
         CartItem newCartItem = new CartItem();
@@ -97,7 +97,7 @@ public class CartServiceImpl implements CartService{
         List<Cart> carts = cartRepository.findAll();
 
         if (carts.size() == 0) {
-            throw new APIException("No cart exists");
+            throw new APIException("Không tìm thấy giỏ hàng");
         }
 
         List<CartDTO> cartDTOs = carts.stream().map(cart -> {
@@ -150,18 +150,18 @@ public class CartServiceImpl implements CartService{
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
 
         if (product.getQuantity() == 0) {
-            throw new APIException(product.getProductName() + " is not available");
+            throw new APIException(product.getProductName() + " không khả dụng");
         }
 
         if (product.getQuantity() < quantity) {
-            throw new APIException("Please, make an order of the " + product.getProductName()
-                    + " less than or equal to the quantity " + product.getQuantity() + ".");
+            throw new APIException("Vui lòng đặt hàng các sản phẩm " + product.getProductName()
+                    + " nhỏ hơn hoặc bằng số lượng " + product.getQuantity() + ".");
         }
 
         CartItem cartItem = cartItemRepository.findCartItemByProductIdAndCartId(cartId, productId);
 
         if (cartItem == null) {
-            throw new APIException("Product " + product.getProductName() + " not available in the cart!!!");
+            throw new APIException("Product " + product.getProductName() + " không có trong giỏ hàng!!!");
         }
 
         // Calculate new quantity
@@ -169,7 +169,7 @@ public class CartServiceImpl implements CartService{
 
         // Validation to prevent negative quantities
         if (newQuantity < 0) {
-            throw new APIException("The resulting quantity cannot be negative.");
+            throw new APIException("Số lượng sau khi tính toán không được âm.");
         }
 
         if (newQuantity == 0){
@@ -237,7 +237,7 @@ public class CartServiceImpl implements CartService{
 
         cartItemRepository.deleteCartItemByProductIdAndCartId(cartId, productId);
 
-        return "Product " + cartItem.getProduct().getProductName() + " removed from the cart !!!";
+        return "Product " + cartItem.getProduct().getProductName() + " đã được xóa khỏi giỏ hàng !!!";
     }
 
 
@@ -252,7 +252,7 @@ public class CartServiceImpl implements CartService{
         CartItem cartItem = cartItemRepository.findCartItemByProductIdAndCartId(cartId, productId);
 
         if (cartItem == null) {
-            throw new APIException("Product " + product.getProductName() + " not available in the cart!!!");
+            throw new APIException("Product " + product.getProductName() + " không có trong giỏ hàng!!!");
         }
 
         double cartPrice = cart.getTotalPrice()
@@ -312,7 +312,7 @@ public class CartServiceImpl implements CartService{
         // Update the cart's total price and save
         existingCart.setTotalPrice(totalPrice);
         cartRepository.save(existingCart);
-        return "Cart created/updated with the new items successfully";
+        return "Giỏ hàng đã được tạo/cập nhật thành công với các sản phẩm mới";
     }
 
 }

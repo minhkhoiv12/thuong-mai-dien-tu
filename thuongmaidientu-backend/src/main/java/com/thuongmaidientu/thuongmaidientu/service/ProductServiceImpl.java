@@ -45,8 +45,7 @@ public class ProductServiceImpl implements ProductService {
     @Value("${project.image}")
     private String path;
 
-    @Value("${image.base.url}")
-    private String imageBaseUrl;
+
 
     @Override
     public ProductDTO addProduct(Long categoryId, ProductDTO productDTO) {
